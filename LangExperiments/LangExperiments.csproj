@@ -50,7 +50,8 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyntaxToken.cs" />
+    <Compile Include="SyntaxNode.cs" />
+    <Compile Include="Attributes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

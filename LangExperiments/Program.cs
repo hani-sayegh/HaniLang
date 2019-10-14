@@ -3,12 +3,7 @@
 namespace LangExperiments
 {
 
-    public class ToStringAttribute : Attribute
-        {
-
-        }
-
-    partial class Program
+    class Program
     {
         //problems encounter readline spawning mysterious thread
         static void Main(string[] args)
@@ -18,15 +13,28 @@ namespace LangExperiments
 
             while (true)
             {
-                var input = Console.ReadLine();
+                //var input = Console.ReadLine();
+                var input = "1 + 3 + 4";
 
                 var parser = new Parser(input);
 
-                var tree = parser.Parse();
+                var expression = parser.Parse();
+
+                Console.WriteLine();
+
+                Print(expression);
 
                 Console.Write("> ");
             }
 
+            void Print(ISyntaxNode node, string indent = "")
+            {
+                Console.WriteLine(indent + node.Kind);
+                foreach(var child in node.Children())
+                {
+                    Print(child, indent + "   ");
+                }
+            }
         }
     }
 }

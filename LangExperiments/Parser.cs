@@ -4,8 +4,8 @@ namespace LangExperiments
 {
     class Parser
     {
-        private List<SyntaxToken> _tokens = new List<SyntaxToken>();
-        private SyntaxToken Current => _tokens[_position == _tokens.Count ? _tokens.Count - 1: _position];
+        private List<SyntaxNode> _tokens = new List<SyntaxNode>();
+        private SyntaxNode Current => _tokens[_position == _tokens.Count ? _tokens.Count - 1: _position];
         private int _position = 0;
         public Parser(string text)
         {
@@ -14,7 +14,7 @@ namespace LangExperiments
 
             while (!token.EndOfString)
             {
-                if (token.SyntaxKind != SyntaxKind.WhiteSpace)
+                if (token.Kind != SyntaxKind.WhiteSpace)
                 {
                     _tokens.Add(token);
                 }
@@ -29,15 +29,15 @@ namespace LangExperiments
 
             while(Current.Operator)
             {
-                var opera = NextToken();
+                var @operator = NextToken();
                 var right = ParsePrimaryExpression();
-                left = new BinaryNode(left, opera, right);
+                left = new BinaryNode(left, @operator, right);
             }
 
             return left;
         }
 
-        public SyntaxToken NextToken()
+        public SyntaxNode NextToken()
         {
             var tmp = Current;
             ++_position;
@@ -46,7 +46,7 @@ namespace LangExperiments
 
         public ISyntaxNode ParsePrimaryExpression()
         {
-            if (Current.SyntaxKind == SyntaxKind.Number)
+            if (Current.Kind == SyntaxKind.Number)
             {
                 return NextToken();
             }

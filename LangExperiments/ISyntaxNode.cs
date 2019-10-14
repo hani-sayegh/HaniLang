@@ -1,7 +1,10 @@
-﻿namespace LangExperiments
-{
+﻿using System.Collections.Generic;
 
-        interface ISyntaxNode
-        {
-        }
+namespace LangExperiments
+{
+    interface ISyntaxNode
+    {
+        IEnumerable<ISyntaxNode> Children();
+        SyntaxKind Kind {get; }
+    }
 }
