@@ -1,0 +1,7 @@
+﻿namespace LangExperiments
+{
+
+        interface ISyntaxNode
+        {
+        }
+}
