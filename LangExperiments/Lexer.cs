@@ -46,6 +46,13 @@
                         new SyntaxNode(SyntaxKind.Plus, start, _text.Substring(start, _position - start));
                 }
 
+                if (Current == '*')
+                {
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.Multiply, start, _text.Substring(start, _position - start));
+                }
+
                 return SyntaxNode.Unrecognized;
             }
         }

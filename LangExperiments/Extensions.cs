@@ -1,26 +1,45 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 namespace LangExperiments
 {
     static class Extensions
+    {
+        public static string Tree(this ISyntaxNode node)
         {
-public static string ToProperties(this object o)
+            var sb = new StringBuilder();
+            Tree(node, "", "");
+            return sb.ToString();
+
+            void Tree(ISyntaxNode n, string indent, string childIndent)
             {
-                var sb = new StringBuilder();
-            var type = o.GetType();
-                foreach (var prop in o.GetType().GetProperties())
+                sb.AppendLine(childIndent + n.ToString());
+
+                var last = n.Children().LastOrDefault();
+                foreach (var child in n.Children())
                 {
-                    foreach (var att in prop.GetCustomAttributes(false))
-                    {
-                        if (att is ToStringAttribute)
-                        {
-                            sb.Append($"{prop.Name}: {prop.GetValue(o)}");
-                            break;
-                        }
-                    }
+                    Tree(child, indent + "│  ", indent + (last == child ? "└──" : "├──"));
                 }
-                
-                return sb.ToString();
             }
         }
+
+        public static string ToProperties(this object o)
+        {
+            var sb = new StringBuilder();
+            var type = o.GetType();
+            foreach (var prop in o.GetType().GetProperties())
+            {
+                foreach (var att in prop.GetCustomAttributes(false))
+                {
+                    if (att is ToStringAttribute)
+                    {
+                        sb.Append($"{prop.Name}: {prop.GetValue(o)}");
+                        break;
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+    }
 }
