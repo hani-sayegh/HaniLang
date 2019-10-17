@@ -12,7 +12,8 @@ namespace LangExperiments
         EndOfString = 16,
         Unrecognized = 32,
         BinaryNode = 64,
-        Plus = 128
+        Plus = 128,
+        Divide = 256
     }
     class SyntaxNode : ISyntaxNode
     {
@@ -24,17 +25,19 @@ namespace LangExperiments
             Kind = syntaxKind;
             Position = position;
             Text = text;
-            var mask = (SyntaxKind.Multiply | SyntaxKind.Minus | SyntaxKind.Plus);
-            Operator = (mask & Kind) != 0;
+
+            Factor = ((SyntaxKind.Minus | SyntaxKind.Plus) & Kind) != 0;
+            Term = ((SyntaxKind.Multiply | SyntaxKind.Divide) & Kind) != 0;
         }
 
-        [ToStringAttribute]
         public SyntaxKind Kind { get; }
         public int Position { get; }
         public string Text { get; }
 
         public bool Number => Kind == SyntaxKind.Number;
-        public readonly bool Operator;
+        public readonly bool Term;
+        public readonly bool Factor;
+
 
         public override string ToString()
         {
@@ -43,6 +46,11 @@ namespace LangExperiments
         public IEnumerable<ISyntaxNode> Children()
         {
             return Enumerable.Empty<SyntaxNode>();
+        }
+
+        public int Evaluate()
+        {
+            return int.Parse(Text);
         }
     }
 }

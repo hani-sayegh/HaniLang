@@ -7,5 +7,7 @@ namespace LangExperiments
     {
         IEnumerable<ISyntaxNode> Children();
         SyntaxKind Kind {get; }
+
+        int Evaluate();
     }
 }

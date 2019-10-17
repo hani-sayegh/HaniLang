@@ -29,16 +29,8 @@ namespace LangExperiments
             var type = o.GetType();
             foreach (var prop in o.GetType().GetProperties())
             {
-                foreach (var att in prop.GetCustomAttributes(false))
-                {
-                    if (att is ToStringAttribute)
-                    {
-                        sb.Append($"{prop.Name}: {prop.GetValue(o)}");
-                        break;
-                    }
-                }
+                sb.AppendLine($"{prop.Name}: {prop.GetValue(o)}");
             }
-
             return sb.ToString();
         }
     }

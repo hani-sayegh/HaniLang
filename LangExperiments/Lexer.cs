@@ -53,6 +53,14 @@
                         new SyntaxNode(SyntaxKind.Multiply, start, _text.Substring(start, _position - start));
                 }
 
+                if (Current == '-')
+                {
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.Minus, start, _text.Substring(start, _position - start));
+                }
+
+            ++_position;
                 return SyntaxNode.Unrecognized;
             }
         }
