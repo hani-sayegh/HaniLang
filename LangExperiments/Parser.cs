@@ -32,6 +32,7 @@ namespace LangExperiments
                 token = lexer.NextToken();
             }
             _tokens.Add(token);
+            _diagnostics.AddRange(lexer.Diagnostics);
         }
 
         public SyntaxTree Parse()

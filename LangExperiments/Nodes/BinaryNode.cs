@@ -31,10 +31,10 @@ namespace LangExperiments
             SyntaxKind.Plus => Left.Evaluate() + Right.Evaluate(),
             SyntaxKind.Minus => Left.Evaluate() - Right.Evaluate(),
             SyntaxKind.Multiply => Left.Evaluate() * Right.Evaluate(),
+            SyntaxKind.Divide => Left.Evaluate() / Right.Evaluate(),
             _ => throw new System.Exception("Could not evalute")
         };
              
-
         public override string ToString()
         {
             return nameof(BinaryNode);

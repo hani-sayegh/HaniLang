@@ -25,9 +25,8 @@ namespace LangExperiments
             Kind = syntaxKind;
             Position = position;
             Text = text;
-
-            Factor = ((SyntaxKind.Minus | SyntaxKind.Plus) & Kind) != 0;
-            Term = ((SyntaxKind.Multiply | SyntaxKind.Divide) & Kind) != 0;
+            Factor = ((SyntaxKind.Multiply | SyntaxKind.Divide) & Kind) != 0;
+            Term = ((SyntaxKind.Minus | SyntaxKind.Plus) & Kind) != 0;
         }
 
         public SyntaxKind Kind { get; }

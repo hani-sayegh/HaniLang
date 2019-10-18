@@ -13,7 +13,7 @@ namespace LangExperiments
             while (true)
             {
                 //var input = Console.ReadLine();
-                var input = "1 + 3 * 9";
+                var input = "1 + 3 * 9 / 2";
 
                 var parser = new Parser(input);
 
@@ -24,6 +24,8 @@ namespace LangExperiments
                 Console.WriteLine(syntaxTree.Root.Tree());
                 Console.WriteLine(syntaxTree.Root.Evaluate());
                 Console.ForegroundColor = ConsoleColor.Red;
+                foreach(var error in syntaxTree.Diagnostics)
+                    Console.WriteLine(error);
 
                 Console.Write("> ");
             }

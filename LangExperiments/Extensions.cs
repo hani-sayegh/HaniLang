@@ -11,14 +11,23 @@ namespace LangExperiments
             Tree(node, "", "");
             return sb.ToString();
 
-            void Tree(ISyntaxNode n, string indent, string childIndent)
+            void Tree(ISyntaxNode n, string indentDepth, string childIndent)
             {
                 sb.AppendLine(childIndent + n.ToString());
 
                 var last = n.Children().LastOrDefault();
                 foreach (var child in n.Children())
                 {
-                    Tree(child, indent + "│  ", indent + (last == child ? "└──" : "├──"));
+                    var (newIndentDepth, newChildIndent) = Indent(child == last);
+                    Tree(child, newIndentDepth, newChildIndent);
+                }
+
+                (string, string) Indent(bool lastChild)
+                {
+                    var t  = ("│  ",  "├──");
+                    if (lastChild)
+                        t = ("   ", "└──");
+                    return (indentDepth + t.Item1, indentDepth + t.Item2);
                 }
             }
         }
