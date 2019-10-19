@@ -2,16 +2,6 @@
 
 namespace LangExperiments
 {
-    class SyntaxTree
-    {
-        public ISyntaxNode Root { get; }
-        public IReadOnlyList<string> Diagnostics { get; }
-        public SyntaxTree(ISyntaxNode root, IReadOnlyList<string> diagnostics)
-        {
-            Root = root;
-            Diagnostics = diagnostics;
-        }
-    }
     class Parser
     {
         private List<SyntaxNode> _tokens = new List<SyntaxNode>();

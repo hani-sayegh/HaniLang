@@ -63,12 +63,12 @@ namespace LangExperiments
                     new SyntaxNode(SyntaxKind.Minus, start, _text.Substring(start, _position - start));
             }
 
-            //if (Current == '/')
-            //{
-            //    ++_position;
-            //    return
-            //        new SyntaxNode(SyntaxKind.Divide, start, _text.Substring(start, _position - start));
-            //}
+            if (Current == '/')
+            {
+                ++_position;
+                return
+                    new SyntaxNode(SyntaxKind.Divide, start, _text.Substring(start, _position - start));
+            }
 
             _diagnostics.Add($"Error: could not recognize following char: {Current}");
             ++_position;
