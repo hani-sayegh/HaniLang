@@ -13,7 +13,7 @@ namespace LangExperiments
             while (true)
             {
                 //var input = Console.ReadLine();
-                var input = "1 + 3 * 9 / 2 * 8 + 3 + 90 - 19";
+                var input = "(1 + 3  * 8";
 
 
                 var syntaxTree = SyntaxTree.Parse(input);

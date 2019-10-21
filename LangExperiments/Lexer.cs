@@ -70,6 +70,20 @@ namespace LangExperiments
                     new SyntaxNode(SyntaxKind.Divide, start, _text.Substring(start, _position - start));
             }
 
+            if (Current == '(')
+            {
+                ++_position;
+                return
+                    new SyntaxNode(SyntaxKind.OpenP, start, _text.Substring(start, _position - start));
+            }
+
+            if (Current == ')')
+            {
+                ++_position;
+                return
+                    new SyntaxNode(SyntaxKind.CloseP, start, _text.Substring(start, _position - start));
+            }
+
             _diagnostics.Add($"Error: could not recognize following char: {Current}");
             ++_position;
             return SyntaxNode.Unrecognized;

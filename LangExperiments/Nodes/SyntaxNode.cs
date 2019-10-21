@@ -13,7 +13,10 @@ namespace LangExperiments
         Unrecognized = 32,
         BinaryNode = 64,
         Plus = 128,
-        Divide = 256
+        Divide = 256,
+        CloseP = 512,
+        OpenP = 1024,
+        ParanExpression = 2048
     }
     class SyntaxNode : ISyntaxNode
     {

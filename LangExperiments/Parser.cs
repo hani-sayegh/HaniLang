@@ -64,21 +64,28 @@ namespace LangExperiments
             return tmp;
         }
 
-        public ISyntaxNode Match(SyntaxKind kind)
+        public SyntaxNode Match(SyntaxKind kind)
         {
             if (Current.Kind == kind)
                 return NextToken();
-            _diagnostics.Add($"'{Current.Kind}' does not match expected kind '{kind}'");
-            return SyntaxNode.Unrecognized;
+
+            _diagnostics.Add($"ERROR: '{Current.Kind}' does not match expected kind '{kind}'");
+            //fabricate token to continue analyzing code and avoid dealing with null
+            return new SyntaxNode(kind, Current.Position, null);
         }
 
         public ISyntaxNode ParsePrimaryExpression()
         {
-            if (Current.Kind == SyntaxKind.Number)
+            if (Current.Kind == SyntaxKind.OpenP)
             {
-                return NextToken();
+                var openP = NextToken();
+                var expression = ParseTerm();
+                var closeP = Match(SyntaxKind.CloseP);
+                return new ParanNode(openP, expression, closeP);
             }
-            throw new System.Exception("werw");
+
+            var numberToken = Match(SyntaxKind.Number);
+            return numberToken;
         }
     }
 }

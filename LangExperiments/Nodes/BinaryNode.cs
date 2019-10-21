@@ -4,6 +4,7 @@ using System.Text;
 
 namespace LangExperiments
 {
+
     class BinaryNode : ISyntaxNode
     {
         public BinaryNode(ISyntaxNode left, SyntaxNode binaryOperator, ISyntaxNode right)
