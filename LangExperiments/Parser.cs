@@ -27,34 +27,34 @@ namespace LangExperiments
 
         public SyntaxTree Parse()
         {
-            var parsedExpression = ParseTerm();
+            var parsedExpression = ParseExpression();
             Match(SyntaxKind.EndOfString);
             return new SyntaxTree(parsedExpression, _diagnostics);
         }
 
-        ISyntaxNode ParseTerm()
+        ISyntaxNode ParseExpression(int parentPrecedence = 0)
         {
-            var left = ParseFactor();
+            var left = ParsePrimaryExpression();
 
-            while (Current.Term)
+            while (GetOperatorPrecedence() != -1)
             {
+                var precdence = GetOperatorPrecedence();
                 var @operator = NextToken();
-                var right = ParseFactor();
+
+                var right = precdence > parentPrecedence ? ParseExpression(precdence) : ParsePrimaryExpression();
+
                 left = new BinaryNode(left, @operator, right);
             }
             return left;
         }
-        ISyntaxNode ParseFactor()
-        {
-            var left = ParsePrimaryExpression();
 
-            while (Current.Factor)
-            {
-                var @operator = NextToken();
-                var right = ParsePrimaryExpression();
-                left = new BinaryNode(left, @operator, right);
-            }
-            return left;
+        int GetOperatorPrecedence()
+        {
+            if (Current.Factor)
+                return 2;
+            else if (Current.Term)
+                return 1;
+            return -1;
         }
 
         public SyntaxNode NextToken()
@@ -74,12 +74,13 @@ namespace LangExperiments
             return new SyntaxNode(kind, Current.Position, null);
         }
 
+        //Primary expressions: number, parantheses
         public ISyntaxNode ParsePrimaryExpression()
         {
             if (Current.Kind == SyntaxKind.OpenP)
             {
                 var openP = NextToken();
-                var expression = ParseTerm();
+                var expression = ParseExpression();
                 var closeP = Match(SyntaxKind.CloseP);
                 return new ParanNode(openP, expression, closeP);
             }
