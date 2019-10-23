@@ -11,7 +11,7 @@ namespace LangExperiments
         public Parser(string text)
         {
             var lexer = new Lexer(text);
-            var token = lexer.NextToken();
+            var token = lexer.Lex();
 
             while (!token.EndOfString)
             {
@@ -19,7 +19,7 @@ namespace LangExperiments
                 {
                     _tokens.Add(token);
                 }
-                token = lexer.NextToken();
+                token = lexer.Lex();
             }
             _tokens.Add(token);
             _diagnostics.AddRange(lexer.Diagnostics);
@@ -34,14 +34,25 @@ namespace LangExperiments
 
         ISyntaxNode ParseExpression(int parentPrecedence = 0)
         {
-            var left = ParsePrimaryExpression();
+            ISyntaxNode left = null;
+            var unaryOperatorPrecedence = GetUnaryOpoeratorPrecedence();
+            if (unaryOperatorPrecedence != -1)
+            {
+                left = new UnaryNode(NextToken(), ParseExpression(unaryOperatorPrecedence));
+            }
+            else
+                left = ParsePrimaryExpression();
 
-            while (GetOperatorPrecedence() != -1)
+            while (true)
             {
                 var precdence = GetOperatorPrecedence();
-                var @operator = NextToken();
+                if(precdence == -1 || parentPrecedence > precdence)
+                {
+                    break;
+                }
 
-                var right = precdence > parentPrecedence ? ParseExpression(precdence) : ParsePrimaryExpression();
+                var @operator = NextToken();
+                var right = ParseExpression(precdence);
 
                 left = new BinaryNode(left, @operator, right);
             }
@@ -54,6 +65,12 @@ namespace LangExperiments
                 return 2;
             else if (Current.Term)
                 return 1;
+            return -1;
+        }
+        int GetUnaryOpoeratorPrecedence()
+        {
+            if (Current.Term)
+                return 3;
             return -1;
         }
 
@@ -85,7 +102,7 @@ namespace LangExperiments
                 return new ParanNode(openP, expression, closeP);
             }
 
-            var numberToken = Match(SyntaxKind.Number);
+            var numberToken = Match(SyntaxKind.LiteralExpression);
             return numberToken;
         }
     }

@@ -15,7 +15,7 @@ namespace LangExperiments
             _text = text;
         }
 
-        public SyntaxNode NextToken()
+        public SyntaxNode Lex()
         {
             if (Current == '\0')
                 return new SyntaxNode(SyntaxKind.EndOfString, _text.Length, "\0");
@@ -39,7 +39,7 @@ namespace LangExperiments
                     ++_position;
                 }
                 return
-                    new SyntaxNode(SyntaxKind.Number, start, _text.Substring(start, _position - start));
+                    new SyntaxNode(SyntaxKind.LiteralExpression, start, _text.Substring(start, _position - start));
             }
 
             if (Current == '+')
@@ -53,21 +53,21 @@ namespace LangExperiments
             {
                 ++_position;
                 return
-                    new SyntaxNode(SyntaxKind.Multiply, start, _text.Substring(start, _position - start));
+                    new SyntaxNode(SyntaxKind.MultiplyToken, start, _text.Substring(start, _position - start));
             }
 
             if (Current == '-')
             {
                 ++_position;
                 return
-                    new SyntaxNode(SyntaxKind.Minus, start, _text.Substring(start, _position - start));
+                    new SyntaxNode(SyntaxKind.MinusToken, start, _text.Substring(start, _position - start));
             }
 
             if (Current == '/')
             {
                 ++_position;
                 return
-                    new SyntaxNode(SyntaxKind.Divide, start, _text.Substring(start, _position - start));
+                    new SyntaxNode(SyntaxKind.DivideToken, start, _text.Substring(start, _position - start));
             }
 
             if (Current == '(')

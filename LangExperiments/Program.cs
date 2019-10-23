@@ -12,8 +12,8 @@ namespace LangExperiments
 
             while (true)
             {
-                //var input = Console.ReadLine();
-                var input = "1 + 3 + 1 + 8";
+                var input = Console.ReadLine();
+                //var input = "1 + 1 * 7 + 1";
 
 
                 var syntaxTree = SyntaxTree.Parse(input);

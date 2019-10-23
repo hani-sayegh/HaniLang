@@ -4,7 +4,6 @@ using System.Text;
 
 namespace LangExperiments
 {
-
     class BinaryNode : ISyntaxNode
     {
         public BinaryNode(ISyntaxNode left, SyntaxNode binaryOperator, ISyntaxNode right)
@@ -30,9 +29,9 @@ namespace LangExperiments
         public int Evaluate() => BinaryOperator.Kind switch
         {
             SyntaxKind.Plus => Left.Evaluate() + Right.Evaluate(),
-            SyntaxKind.Minus => Left.Evaluate() - Right.Evaluate(),
-            SyntaxKind.Multiply => Left.Evaluate() * Right.Evaluate(),
-            SyntaxKind.Divide => Left.Evaluate() / Right.Evaluate(),
+            SyntaxKind.MinusToken => Left.Evaluate() - Right.Evaluate(),
+            SyntaxKind.MultiplyToken => Left.Evaluate() * Right.Evaluate(),
+            SyntaxKind.DivideToken => Left.Evaluate() / Right.Evaluate(),
             _ => throw new System.Exception("Could not evalute")
         };
              
