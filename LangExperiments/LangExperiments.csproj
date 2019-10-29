@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binder.cs" />
     <Compile Include="Nodes\BinaryNode.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Nodes\ISyntaxNode.cs" />

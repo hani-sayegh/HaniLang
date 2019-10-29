@@ -44,14 +44,15 @@ namespace LangExperiments
 
     class SyntaxNode : ISyntaxNode
     {
-        public static SyntaxNode Unrecognized { get; } = new SyntaxNode(SyntaxKind.Unrecognized, -1, "");
+        public static SyntaxNode Unrecognized { get; } = new SyntaxNode(SyntaxKind.Unrecognized, -1, "", null);
 
         public bool EndOfString => Kind == SyntaxKind.EndOfString;
-        public SyntaxNode(SyntaxKind syntaxKind, int position, string text)
+        public SyntaxNode(SyntaxKind syntaxKind, int position, string text, object value = null)
         {
             Kind = syntaxKind;
             Position = position;
             Text = text;
+            Value = value;
             Factor = Kind == SyntaxKind.MultiplyToken || Kind == SyntaxKind.DivideToken;
             Term = Kind == SyntaxKind.Plus || Kind == SyntaxKind.MinusToken;
         }
@@ -59,6 +60,7 @@ namespace LangExperiments
         public SyntaxKind Kind { get; }
         public int Position { get; }
         public string Text { get; }
+        public object Value { get; }
 
         public bool Number => Kind == SyntaxKind.LiteralExpression;
         public readonly bool Term;

@@ -38,8 +38,14 @@ namespace LangExperiments
                 {
                     ++_position;
                 }
+                int integer;
+                var text = _text.Substring(start, _position - start);
+                var parsed = int.TryParse(text, out integer);
+                if (!parsed)
+                    _diagnostics.Add($"Could not represet {text} with 32 bit int");
+
                 return
-                    new SyntaxNode(SyntaxKind.LiteralExpression, start, _text.Substring(start, _position - start));
+                    new SyntaxNode(SyntaxKind.LiteralExpression, start, _text.Substring(start, _position - start), parsed ? (int ?)integer: null);
             }
 
             if (Current == '+')

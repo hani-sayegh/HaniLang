@@ -17,11 +17,14 @@ namespace LangExperiments
 
 
                 var syntaxTree = SyntaxTree.Parse(input);
+                var boundTree = new Binder().BindExpression(syntaxTree.Root);
+
+
 
                 Console.WriteLine();
 
                 Console.WriteLine(syntaxTree.Root.Tree());
-                Console.WriteLine(syntaxTree.Root.Evaluate());
+                Console.WriteLine(boundTree.Evaluate());
                 Console.ForegroundColor = ConsoleColor.Red;
                 foreach(var error in syntaxTree.Diagnostics)
                     Console.WriteLine(error);
