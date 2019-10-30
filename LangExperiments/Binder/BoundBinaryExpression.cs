@@ -21,10 +21,10 @@ namespace LangExperiments
 
         public BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
 
-        public int Evaluate()
+        public object Evaluate()
         {
-            var left = Left.Evaluate();
-            var right = Right.Evaluate();
+            var left = (int)Left.Evaluate();
+            var right = (int)Right.Evaluate();
             return SwitchOperator();
 
             int SwitchOperator() => OperatorKind switch

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LangExperiments.Nodes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace LangExperiments
     interface BoundExpression : BoundNode
     {
         Type Type { get; }
-        int Evaluate();
+        object Evaluate();
     }
 
     enum BoundUnaryOperatorKind
@@ -46,7 +47,7 @@ namespace LangExperiments
             switch (syntax.Kind)
             {
                 case SyntaxKind.LiteralExpression:
-                    return BindLiteralExpression((SyntaxNode)syntax);
+                    return BindLiteralExpression((LiteralNode)syntax);
                 case SyntaxKind.BinaryNode:
                     return BindBinaryExpression((BinaryNode)syntax);
                 case SyntaxKind.UnaryExpression:
@@ -116,9 +117,9 @@ namespace LangExperiments
                 _ => throw new Exception($"Could not recognize operator: {syntaxNode.Kind}"),
             };
 
-        private BoundExpression BindLiteralExpression(SyntaxNode syntax)
+        private BoundExpression BindLiteralExpression(LiteralNode syntax)
         {
-            var value = syntax.Value as int? ?? 0;
+            var value = syntax.Value ?? 0;
             return new BoundLiteralExpression(value);
         }
     }

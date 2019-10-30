@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LangExperiments.Nodes;
+using System.Collections.Generic;
 
 namespace LangExperiments
 {
@@ -88,7 +89,7 @@ namespace LangExperiments
 
             _diagnostics.Add($"ERROR: '{Current.Kind}' does not match expected kind '{kind}'");
             //fabricate token to continue analyzing code and avoid dealing with null
-            return new SyntaxNode(kind, Current.Position, null);
+            return new SyntaxNode(kind, Current.Position,null, null, true);
         }
 
         //Primary expressions: number, parantheses
@@ -101,9 +102,14 @@ namespace LangExperiments
                 var closeP = Match(SyntaxKind.CloseP);
                 return new ParanNode(openP, expression, closeP);
             }
+            else if(Current.Kind == SyntaxKind.falseKeyword
+                    || Current.Kind == SyntaxKind.TrueKeyword)
+            {
+                return new LiteralNode(NextToken());
+            }
 
-            var numberToken = Match(SyntaxKind.LiteralExpression);
-            return numberToken;
+            var numberToken = Match(SyntaxKind.NumberToken);
+            return new LiteralNode(numberToken);
         }
     }
 }

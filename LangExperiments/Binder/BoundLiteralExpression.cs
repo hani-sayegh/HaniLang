@@ -15,9 +15,9 @@ namespace LangExperiments
 
         public BoundNodeKind Kind => BoundNodeKind.LiteralExpression;
 
-        public int Evaluate()
+        public object Evaluate()
         {
-            return (int)Value;
+            return Value;
         }
     }
 }

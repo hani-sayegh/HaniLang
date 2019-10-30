@@ -16,9 +16,9 @@ namespace LangExperiments
         public BoundUnaryOperatorKind OperatorKind { get; }
         public BoundExpression Operand { get; }
 
-        public int Evaluate()
+        public object Evaluate()
         {
-            var result = Operand.Evaluate();
+            var result = (int)Operand.Evaluate();
             if (OperatorKind == BoundUnaryOperatorKind.Negation)
                 result = -result;
 

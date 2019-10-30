@@ -17,7 +17,8 @@ namespace LangExperiments
 
 
                 var syntaxTree = SyntaxTree.Parse(input);
-                var boundTree = new Binder().BindExpression(syntaxTree.Root);
+                var binder = new Binder();
+                var boundTree = binder.BindExpression(syntaxTree.Root);
 
 
 
@@ -26,8 +27,9 @@ namespace LangExperiments
                 Console.WriteLine(syntaxTree.Root.Tree());
                 Console.WriteLine(boundTree.Evaluate());
                 Console.ForegroundColor = ConsoleColor.Red;
-                foreach(var error in syntaxTree.Diagnostics)
+                foreach(var error in syntaxTree.Diagnostics.Concat(binder.Diagnostics))
                     Console.WriteLine(error);
+                Console.ResetColor();
 
                 Console.Write("> ");
             }

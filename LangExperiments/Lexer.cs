@@ -15,6 +15,13 @@ namespace LangExperiments
             _text = text;
         }
 
+        SyntaxKind KeyWordKind(string keyword) => keyword switch
+        {
+            "false" => SyntaxKind.falseKeyword,
+            "true" => SyntaxKind.TrueKeyword,
+            _ => SyntaxKind.undefinedKeyword
+        };
+
         public SyntaxNode Lex()
         {
             if (Current == '\0')
@@ -32,6 +39,19 @@ namespace LangExperiments
                     new SyntaxNode(SyntaxKind.WhiteSpace, start, _text.Substring(start, _position - start));
             }
 
+            if(char.IsLetter(Current))
+            {
+                while (char.IsLetter(Current))
+                {
+                    ++_position;
+                }
+                var keyword = _text.Substring(start, _position - start);
+                var keywordVal = KeyWordKind(keyword) == SyntaxKind.TrueKeyword;
+
+                return
+                    new SyntaxNode(KeyWordKind(keyword), start, keyword, keywordVal);
+            }
+
             if (char.IsDigit(Current))
             {
                 while (char.IsDigit(Current))
@@ -45,7 +65,7 @@ namespace LangExperiments
                     _diagnostics.Add($"Could not represet {text} with 32 bit int");
 
                 return
-                    new SyntaxNode(SyntaxKind.LiteralExpression, start, _text.Substring(start, _position - start), parsed ? (int ?)integer: null);
+                    new SyntaxNode(SyntaxKind.NumberToken, start, _text.Substring(start, _position - start), parsed ? (int ?)integer: null);
             }
 
             if (Current == '+')

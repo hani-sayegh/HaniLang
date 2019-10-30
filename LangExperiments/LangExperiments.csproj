@@ -48,11 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Binder.cs" />
+    <Compile Include="Binder\Binder.cs" />
+    <Compile Include="Binder\BoundBinaryExpression.cs" />
+    <Compile Include="Binder\BoundLiteralExpression.cs" />
+    <Compile Include="Binder\BoundUnaryExpression.cs" />
     <Compile Include="Nodes\BinaryNode.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Nodes\ISyntaxNode.cs" />
     <Compile Include="Lexer.cs" />
+    <Compile Include="Nodes\LiteralNode.cs" />
     <Compile Include="Nodes\ParanNode.cs" />
     <Compile Include="Nodes\UnaryNode.cs" />
     <Compile Include="Parser.cs" />

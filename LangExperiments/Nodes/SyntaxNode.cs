@@ -20,6 +20,10 @@ namespace LangExperiments
         UnaryExpression,
         LiteralExpression,
         BinaryNode,
+        falseKeyword,
+        TrueKeyword,
+        undefinedKeyword,
+        NumberToken,
     }
 
     class NumberNode : ISyntaxNode
@@ -47,11 +51,12 @@ namespace LangExperiments
         public static SyntaxNode Unrecognized { get; } = new SyntaxNode(SyntaxKind.Unrecognized, -1, "", null);
 
         public bool EndOfString => Kind == SyntaxKind.EndOfString;
-        public SyntaxNode(SyntaxKind syntaxKind, int position, string text, object value = null)
+        public SyntaxNode(SyntaxKind syntaxKind, int position, string text, object value = null, bool fabricated = false)
         {
             Kind = syntaxKind;
             Position = position;
             Text = text;
+            Fabricated = fabricated;
             Value = value;
             Factor = Kind == SyntaxKind.MultiplyToken || Kind == SyntaxKind.DivideToken;
             Term = Kind == SyntaxKind.Plus || Kind == SyntaxKind.MinusToken;
@@ -60,20 +65,20 @@ namespace LangExperiments
         public SyntaxKind Kind { get; }
         public int Position { get; }
         public string Text { get; }
+        public bool Fabricated { get; }
         public object Value { get; }
 
-        public bool Number => Kind == SyntaxKind.LiteralExpression;
         public readonly bool Term;
         public readonly bool Factor;
 
 
         public override string ToString()
         {
-            return Kind + " " + Text;
+            return (Fabricated ? "Fabricated: " : "") + Kind + " " + Text;
         }
         public IEnumerable<ISyntaxNode> Children()
         {
-            return Enumerable.Empty<SyntaxNode>();
+            return Enumerable.Empty<ISyntaxNode>();
         }
 
         public int Evaluate()
