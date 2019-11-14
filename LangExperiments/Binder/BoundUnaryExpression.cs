@@ -18,9 +18,14 @@ namespace LangExperiments
 
         public object Evaluate()
         {
-            var result = (int)Operand.Evaluate();
+            var result = Operand.Evaluate();
+            var type = Operand.Type;
+            if (type == typeof(bool))
+                if (OperatorKind == BoundUnaryOperatorKind.Not)
+                    result = !(bool)result;
+            if(type == typeof(int))
             if (OperatorKind == BoundUnaryOperatorKind.Negation)
-                result = -result;
+                result = -(int)result;
 
             return result;
         }

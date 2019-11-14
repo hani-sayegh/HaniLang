@@ -20,7 +20,12 @@ namespace LangExperiments.Nodes
 
         public IEnumerable<ISyntaxNode> Children()
         {
-            yield return SyntaxNode;
+            return Enumerable.Empty<ISyntaxNode>();
+        }
+
+        public override string ToString()
+        {
+            return SyntaxNode.ToString();
         }
 
         public int Evaluate()

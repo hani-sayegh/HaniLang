@@ -13,13 +13,9 @@ namespace LangExperiments
         LiteralExpression
     }
 
-    interface BoundNode
+    interface BoundExpression
     {
-        BoundNodeKind Kind { get; }
-    }
-
-    interface BoundExpression : BoundNode
-    {
+        //we only know the type at runtime
         Type Type { get; }
         object Evaluate();
     }
@@ -27,7 +23,8 @@ namespace LangExperiments
     enum BoundUnaryOperatorKind
     {
         Identity,
-        Negation
+        Negation,
+        Not
     }
 
     enum BoundBinaryOperatorKind
@@ -35,7 +32,8 @@ namespace LangExperiments
         Addition,
         Subtraction,
         Multiplication,
-        Division
+        Division,
+        LogicalAnd
     }
 
     class Binder
@@ -73,15 +71,30 @@ namespace LangExperiments
 
         private BoundUnaryOperatorKind? BinadUnaryOperatorKind(SyntaxNode operatorToken, BoundExpression boundExpression)
         {
-            if (boundExpression.Type != typeof(int))
-                return null;
-
-            switch (operatorToken.Kind)
+            var type = boundExpression.Type;
+            if (type == typeof(int))
             {
-                case SyntaxKind.Plus: return BoundUnaryOperatorKind.Identity;
-                case SyntaxKind.MinusToken: return BoundUnaryOperatorKind.Negation;
-                default: throw new Exception($"Operator token {operatorToken.Kind} not recignized");
+                switch (operatorToken.Kind)
+                {
+                    case SyntaxKind.Plus: return BoundUnaryOperatorKind.Identity;
+                    case SyntaxKind.MinusToken: return BoundUnaryOperatorKind.Negation;
+                    default: 
+                        _diagnostics.Add($"Operator token {operatorToken.Kind} not applicable on type {type}");
+                        return null;
+                }
             }
+            else if (type == typeof(bool))
+            {
+                switch (operatorToken.Kind)
+                {
+                    case SyntaxKind.Not: return BoundUnaryOperatorKind.Not;
+                    default: 
+                        _diagnostics.Add($"Operator token {operatorToken.Kind} not applicable on type {type}");
+                        return null;
+                }
+            }
+
+            return null;
         }
 
         private BoundExpression BindBinaryExpression(BinaryNode syntax)
@@ -101,9 +114,25 @@ namespace LangExperiments
         private BoundBinaryOperatorKind? BindBinaryOperator(SyntaxNode syntaxNode, BoundExpression left,
             BoundExpression right)
         {
-            var intType = typeof(int);
-            if (left.Type != intType || right.Type != intType)
+            if(left.Type != right.Type)
                 return null;
+
+            if (left.Type == typeof(bool))
+            {
+                var validBoolOperators = new List<SyntaxKind> { SyntaxKind.LogicalAnd };
+                if (!validBoolOperators.Contains(syntaxNode.Kind))
+                    return null;
+            }
+
+            else if (left.Type == typeof(int))
+            {
+                var validIntOperators = new List<SyntaxKind> { SyntaxKind.Plus, SyntaxKind.MinusToken, SyntaxKind.MultiplyToken, SyntaxKind.DivideToken };
+
+                if (!validIntOperators.Contains(syntaxNode.Kind))
+                    return null;
+            }
+            else return null;
+
             return SwitchBindBinaryOperator(syntaxNode);
         }
 
@@ -114,6 +143,7 @@ namespace LangExperiments
                 SyntaxKind.MinusToken => BoundBinaryOperatorKind.Subtraction,
                 SyntaxKind.DivideToken => BoundBinaryOperatorKind.Division,
                 SyntaxKind.MultiplyToken => BoundBinaryOperatorKind.Multiplication,
+                SyntaxKind.LogicalAnd => BoundBinaryOperatorKind.LogicalAnd,
                 _ => throw new Exception($"Could not recognize operator: {syntaxNode.Kind}"),
             };
 

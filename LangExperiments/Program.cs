@@ -12,6 +12,7 @@ namespace LangExperiments
 
             while (true)
             {
+
                 var input = Console.ReadLine();
                 //var input = "1 + 1 * 7 + 1";
 

@@ -39,20 +39,20 @@ namespace LangExperiments
             var unaryOperatorPrecedence = GetUnaryOpoeratorPrecedence();
             if (unaryOperatorPrecedence != -1)
             {
-                left = new UnaryNode(NextToken(), ParseExpression(unaryOperatorPrecedence));
+                left = new UnaryNode(ConsumeToken(), ParseExpression(unaryOperatorPrecedence));
             }
             else
-                left = ParsePrimaryExpression();
+                left = ConsumePrimaryExpression();
 
             while (true)
             {
-                var precdence = GetOperatorPrecedence();
+                var precdence = GetBinaryOperatorPrecedence();
                 if(precdence == -1 || parentPrecedence > precdence)
                 {
                     break;
                 }
 
-                var @operator = NextToken();
+                var @operator = ConsumeToken();
                 var right = ParseExpression(precdence);
 
                 left = new BinaryNode(left, @operator, right);
@@ -60,11 +60,13 @@ namespace LangExperiments
             return left;
         }
 
-        int GetOperatorPrecedence()
+        int GetBinaryOperatorPrecedence()
         {
             if (Current.Factor)
-                return 2;
+                return 3;
             else if (Current.Term)
+                return 2;
+            else if (Current.Kind == SyntaxKind.LogicalAnd)
                 return 1;
             return -1;
         }
@@ -72,10 +74,12 @@ namespace LangExperiments
         {
             if (Current.Term)
                 return 3;
+            if (Current.Kind == SyntaxKind.Not)
+                return 3;
             return -1;
         }
 
-        public SyntaxNode NextToken()
+        public SyntaxNode ConsumeToken()
         {
             var tmp = Current;
             ++_position;
@@ -85,19 +89,19 @@ namespace LangExperiments
         public SyntaxNode Match(SyntaxKind kind)
         {
             if (Current.Kind == kind)
-                return NextToken();
+                return ConsumeToken();
 
             _diagnostics.Add($"ERROR: '{Current.Kind}' does not match expected kind '{kind}'");
             //fabricate token to continue analyzing code and avoid dealing with null
             return new SyntaxNode(kind, Current.Position,null, null, true);
         }
 
-        //Primary expressions: number, parantheses
-        public ISyntaxNode ParsePrimaryExpression()
+        //Primary expressions: number, parantheses, bool
+        public ISyntaxNode ConsumePrimaryExpression()
         {
             if (Current.Kind == SyntaxKind.OpenP)
             {
-                var openP = NextToken();
+                var openP = ConsumeToken();
                 var expression = ParseExpression();
                 var closeP = Match(SyntaxKind.CloseP);
                 return new ParanNode(openP, expression, closeP);
@@ -105,7 +109,7 @@ namespace LangExperiments
             else if(Current.Kind == SyntaxKind.falseKeyword
                     || Current.Kind == SyntaxKind.TrueKeyword)
             {
-                return new LiteralNode(NextToken());
+                return new LiteralNode(ConsumeToken());
             }
 
             var numberToken = Match(SyntaxKind.NumberToken);

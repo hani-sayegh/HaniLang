@@ -6,9 +6,10 @@ namespace LangExperiments
     {
         string _text;
         int _position = 0;
-        public char Current => _position == _text.Length ? '\0' : _text[_position];
+        char Current => Peek(0);
         private readonly List<string> _diagnostics = new List<string>();
         public List<string> Diagnostics => _diagnostics;
+        char Peek(int offset) => _position + offset >= _text.Length ? '\0' : _text[_position + offset];
 
         public Lexer(string text)
         {
@@ -68,46 +69,40 @@ namespace LangExperiments
                     new SyntaxNode(SyntaxKind.NumberToken, start, _text.Substring(start, _position - start), parsed ? (int ?)integer: null);
             }
 
-            if (Current == '+')
+            switch (Current)
             {
-                ++_position;
-                return
-                    new SyntaxNode(SyntaxKind.Plus, start, _text.Substring(start, _position - start));
-            }
+                case '+':
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.Plus, start, _text.Substring(start, _position - start));
+                case '*':
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.MultiplyToken, start, _text.Substring(start, _position - start));
+                case '-':
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.MinusToken, start, _text.Substring(start, _position - start));
+                case '/':
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.DivideToken, start, _text.Substring(start, _position - start));
+                case '(':
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.OpenP, start, _text.Substring(start, _position - start));
+                case ')':
+                    ++_position;
+                    return
+                        new SyntaxNode(SyntaxKind.CloseP, start, _text.Substring(start, _position - start));
+                case '!':
+                    ++_position;
+                    return new SyntaxNode(SyntaxKind.Not, start, _text.Substring(start, _position - start));
+                   case '&':
+                    if (Peek(1) == '&')
+                        _position += 2;
+                    return new SyntaxNode(SyntaxKind.LogicalAnd, start, _text.Substring(start, _position - start));
 
-            if (Current == '*')
-            {
-                ++_position;
-                return
-                    new SyntaxNode(SyntaxKind.MultiplyToken, start, _text.Substring(start, _position - start));
-            }
-
-            if (Current == '-')
-            {
-                ++_position;
-                return
-                    new SyntaxNode(SyntaxKind.MinusToken, start, _text.Substring(start, _position - start));
-            }
-
-            if (Current == '/')
-            {
-                ++_position;
-                return
-                    new SyntaxNode(SyntaxKind.DivideToken, start, _text.Substring(start, _position - start));
-            }
-
-            if (Current == '(')
-            {
-                ++_position;
-                return
-                    new SyntaxNode(SyntaxKind.OpenP, start, _text.Substring(start, _position - start));
-            }
-
-            if (Current == ')')
-            {
-                ++_position;
-                return
-                    new SyntaxNode(SyntaxKind.CloseP, start, _text.Substring(start, _position - start));
             }
 
             _diagnostics.Add($"Error: could not recognize following char: {Current}");

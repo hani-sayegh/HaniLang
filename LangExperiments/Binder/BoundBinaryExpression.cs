@@ -19,20 +19,19 @@ namespace LangExperiments
 
         public Type Type => Left.Type;
 
-        public BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
-
         public object Evaluate()
         {
-            var left = (int)Left.Evaluate();
-            var right = (int)Right.Evaluate();
+            dynamic left =  Left.Evaluate();
+            dynamic right = Right.Evaluate();
             return SwitchOperator();
 
-            int SwitchOperator() => OperatorKind switch
+            object SwitchOperator() => OperatorKind switch
             {
                 BoundBinaryOperatorKind.Addition => left + right,
                 BoundBinaryOperatorKind.Subtraction => left - right,
                 BoundBinaryOperatorKind.Multiplication => left * right,
                 BoundBinaryOperatorKind.Division => left / right,
+                BoundBinaryOperatorKind.LogicalAnd => left && right,
                 _ => throw new Exception("Invalid operator")
             };
         }

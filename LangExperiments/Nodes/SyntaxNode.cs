@@ -24,26 +24,8 @@ namespace LangExperiments
         TrueKeyword,
         undefinedKeyword,
         NumberToken,
-    }
-
-    class NumberNode : ISyntaxNode
-    {
-        public NumberNode()
-        {
-
-        }
-
-        public SyntaxKind Kind => throw new System.NotImplementedException();
-
-        public IEnumerable<ISyntaxNode> Children()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public int Evaluate()
-        {
-            throw new System.NotImplementedException();
-        }
+        Not,
+        LogicalAnd,
     }
 
     class SyntaxNode : ISyntaxNode

@@ -24,7 +24,7 @@ namespace LangExperiments
         {
             if (OperatorToken.Kind == SyntaxKind.Plus)
                 return +Expression.Evaluate();
-            if (OperatorToken.Kind == SyntaxKind.MinusToken)
+            else if (OperatorToken.Kind == SyntaxKind.MinusToken)
                 return -Expression.Evaluate();
 
             throw new System.Exception("Unrecognized operator: " + OperatorToken.Kind);
