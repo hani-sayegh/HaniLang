@@ -33,7 +33,10 @@ namespace LangExperiments
         Subtraction,
         Multiplication,
         Division,
-        LogicalAnd
+        LogicalAnd,
+        LogicalEqual,
+        LogicalOr,
+        NotEqual
     }
 
     class Binder
@@ -111,7 +114,7 @@ namespace LangExperiments
             return new BoundBinaryExpression(boundLeft, boundOperator.Value, boundRight);
         }
 
-        private BoundBinaryOperatorKind? BindBinaryOperator(SyntaxNode syntaxNode, BoundExpression left,
+        private (BoundBinaryOperatorKind, Type)? BindBinaryOperator(SyntaxNode syntaxNode, BoundExpression left,
             BoundExpression right)
         {
             if(left.Type != right.Type)
@@ -119,14 +122,14 @@ namespace LangExperiments
 
             if (left.Type == typeof(bool))
             {
-                var validBoolOperators = new List<SyntaxKind> { SyntaxKind.LogicalAnd };
+                var validBoolOperators = new List<SyntaxKind> { SyntaxKind.LogicalAnd, SyntaxKind.LogicalEqual, SyntaxKind.LogicalOr, SyntaxKind.NotEqual };
                 if (!validBoolOperators.Contains(syntaxNode.Kind))
                     return null;
             }
 
             else if (left.Type == typeof(int))
             {
-                var validIntOperators = new List<SyntaxKind> { SyntaxKind.Plus, SyntaxKind.MinusToken, SyntaxKind.MultiplyToken, SyntaxKind.DivideToken };
+                var validIntOperators = new List<SyntaxKind> { SyntaxKind.Plus, SyntaxKind.MinusToken, SyntaxKind.MultiplyToken, SyntaxKind.DivideToken, SyntaxKind.LogicalEqual, SyntaxKind.NotEqual};
 
                 if (!validIntOperators.Contains(syntaxNode.Kind))
                     return null;
@@ -136,14 +139,17 @@ namespace LangExperiments
             return SwitchBindBinaryOperator(syntaxNode);
         }
 
-        private BoundBinaryOperatorKind SwitchBindBinaryOperator(SyntaxNode syntaxNode) =>
+        private (BoundBinaryOperatorKind, Type) SwitchBindBinaryOperator(SyntaxNode syntaxNode) =>
             syntaxNode.Kind switch
             {
-                SyntaxKind.Plus => BoundBinaryOperatorKind.Addition,
-                SyntaxKind.MinusToken => BoundBinaryOperatorKind.Subtraction,
-                SyntaxKind.DivideToken => BoundBinaryOperatorKind.Division,
-                SyntaxKind.MultiplyToken => BoundBinaryOperatorKind.Multiplication,
-                SyntaxKind.LogicalAnd => BoundBinaryOperatorKind.LogicalAnd,
+                SyntaxKind.Plus => (BoundBinaryOperatorKind.Addition, typeof(int)),
+                SyntaxKind.MinusToken => (BoundBinaryOperatorKind.Subtraction, typeof(int)),
+                SyntaxKind.DivideToken => (BoundBinaryOperatorKind.Division, typeof(int)),
+                SyntaxKind.MultiplyToken => (BoundBinaryOperatorKind.Multiplication, typeof(int)),
+                SyntaxKind.LogicalAnd => (BoundBinaryOperatorKind.LogicalAnd, typeof(bool)),
+                SyntaxKind.LogicalEqual => (BoundBinaryOperatorKind.LogicalEqual, typeof(bool)),
+                SyntaxKind.LogicalOr => (BoundBinaryOperatorKind.LogicalOr, typeof(bool)),
+                SyntaxKind.NotEqual => (BoundBinaryOperatorKind.NotEqual, typeof(bool)),
                 _ => throw new Exception($"Could not recognize operator: {syntaxNode.Kind}"),
             };
 

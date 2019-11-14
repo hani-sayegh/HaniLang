@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LangExperiments
 {
@@ -40,7 +41,7 @@ namespace LangExperiments
                     new SyntaxNode(SyntaxKind.WhiteSpace, start, _text.Substring(start, _position - start));
             }
 
-            if(char.IsLetter(Current))
+            if (char.IsLetter(Current))
             {
                 while (char.IsLetter(Current))
                 {
@@ -66,7 +67,7 @@ namespace LangExperiments
                     _diagnostics.Add($"Could not represet {text} with 32 bit int");
 
                 return
-                    new SyntaxNode(SyntaxKind.NumberToken, start, _text.Substring(start, _position - start), parsed ? (int ?)integer: null);
+                    new SyntaxNode(SyntaxKind.NumberToken, start, _text.Substring(start, _position - start), parsed ? (int?)integer : null);
             }
 
             switch (Current)
@@ -96,13 +97,34 @@ namespace LangExperiments
                     return
                         new SyntaxNode(SyntaxKind.CloseP, start, _text.Substring(start, _position - start));
                 case '!':
+                    if(Peek(1) == '=')
+                    {
+                        _position += 2;
+                    return new SyntaxNode(SyntaxKind.NotEqual, start, _text.Substring(start, _position - start));
+                    }
+                    else
+                    {
                     ++_position;
                     return new SyntaxNode(SyntaxKind.Not, start, _text.Substring(start, _position - start));
-                   case '&':
+                    }
+                case '&':
                     if (Peek(1) == '&')
                         _position += 2;
                     return new SyntaxNode(SyntaxKind.LogicalAnd, start, _text.Substring(start, _position - start));
-
+                case '=':
+                    if (Peek(1) == '=')
+                    {
+                        _position += 2;
+                    return new SyntaxNode(SyntaxKind.LogicalEqual, start, _text.Substring(start, _position - start));
+                    }
+                    throw new Exception("sfd");
+                case '|':
+                    if (Peek(1) == '|')
+                    {
+                        _position += 2;
+                    return new SyntaxNode(SyntaxKind.LogicalOr, start, _text.Substring(start, _position - start));
+                    }
+                    throw new Exception("sfd");
             }
 
             _diagnostics.Add($"Error: could not recognize following char: {Current}");

@@ -26,6 +26,9 @@ namespace LangExperiments
         NumberToken,
         Not,
         LogicalAnd,
+        LogicalEqual,
+        LogicalOr,
+        NotEqual,
     }
 
     class SyntaxNode : ISyntaxNode

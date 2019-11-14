@@ -63,10 +63,12 @@ namespace LangExperiments
         int GetBinaryOperatorPrecedence()
         {
             if (Current.Factor)
-                return 3;
+                return 4;
             else if (Current.Term)
+                return 3;
+            else if (Current.Kind == SyntaxKind.LogicalEqual || Current.Kind == SyntaxKind.NotEqual)
                 return 2;
-            else if (Current.Kind == SyntaxKind.LogicalAnd)
+            else if (Current.Kind == SyntaxKind.LogicalAnd || Current.Kind == SyntaxKind.LogicalOr)
                 return 1;
             return -1;
         }
