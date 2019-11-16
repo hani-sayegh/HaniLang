@@ -32,8 +32,8 @@ namespace LangExperiments
                 BoundBinaryOperatorKind.Subtraction => left - right,
                 BoundBinaryOperatorKind.Multiplication => left * right,
                 BoundBinaryOperatorKind.Division => left / right,
-                BoundBinaryOperatorKind.LogicalAnd => left && right,
                 BoundBinaryOperatorKind.LogicalEqual => left == right,
+                BoundBinaryOperatorKind.LogicalAnd => left && right,
                 BoundBinaryOperatorKind.LogicalOr => left || right,
                 BoundBinaryOperatorKind.NotEqual => left != right,
                 _ => throw new Exception("Invalid operator")

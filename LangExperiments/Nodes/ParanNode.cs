@@ -12,7 +12,6 @@ namespace LangExperiments
 
         public SyntaxNode OpenP { get; }
         public ISyntaxNode Expression { get; }
-        public ISyntaxNode SyntaxNode { get; }
         public SyntaxNode CloseP { get; }
 
         public ParanNode(SyntaxNode openP, ISyntaxNode expression, SyntaxNode closeP)

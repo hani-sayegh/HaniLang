@@ -29,6 +29,7 @@ namespace LangExperiments
         LogicalEqual,
         LogicalOr,
         NotEqual,
+        Identifier,
     }
 
     class SyntaxNode : ISyntaxNode

@@ -48,11 +48,15 @@ namespace LangExperiments
             switch (syntax.Kind)
             {
                 case SyntaxKind.LiteralExpression:
-                    return BindLiteralExpression((LiteralNode)syntax);
+                    return BindLiteralExpression(syntax.To<LiteralNode>());
                 case SyntaxKind.BinaryNode:
-                    return BindBinaryExpression((BinaryNode)syntax);
+                    return BindBinaryExpression(syntax.To<BinaryNode>());
                 case SyntaxKind.UnaryExpression:
-                    return BindUnaryExpression((UnaryNode)syntax);
+                    return BindUnaryExpression(syntax.To<UnaryNode>());
+                case SyntaxKind.ParanExpression:
+                    return BindExpression(syntax.To<ParanNode>().Expression);
+                case SyntaxKind.Identifier:
+                    return BindExpression(syntax.To<IdentifierNode>().Expression);
                 default:
                     throw new Exception($"Invalid {syntax.Kind}");
             }

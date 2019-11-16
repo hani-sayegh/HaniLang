@@ -47,7 +47,7 @@ namespace LangExperiments
             while (true)
             {
                 var precdence = GetBinaryOperatorPrecedence();
-                if(precdence == -1 || parentPrecedence > precdence)
+                if (precdence == -1 || parentPrecedence > precdence)
                 {
                     break;
                 }
@@ -95,20 +95,25 @@ namespace LangExperiments
 
             _diagnostics.Add($"ERROR: '{Current.Kind}' does not match expected kind '{kind}'");
             //fabricate token to continue analyzing code and avoid dealing with null
-            return new SyntaxNode(kind, Current.Position,null, null, true);
+            return new SyntaxNode(kind, Current.Position, null, null, true);
         }
 
         //Primary expressions: number, parantheses, bool
         public ISyntaxNode ConsumePrimaryExpression()
         {
-            if (Current.Kind == SyntaxKind.OpenP)
+            if (Current.Kind == SyntaxKind.Identifier)
+            {
+                return new IdentifierNode(ConsumeToken(), ParseExpression());
+            }
+
+            else if (Current.Kind == SyntaxKind.OpenP)
             {
                 var openP = ConsumeToken();
                 var expression = ParseExpression();
                 var closeP = Match(SyntaxKind.CloseP);
                 return new ParanNode(openP, expression, closeP);
             }
-            else if(Current.Kind == SyntaxKind.falseKeyword
+            else if (Current.Kind == SyntaxKind.falseKeyword
                     || Current.Kind == SyntaxKind.TrueKeyword)
             {
                 return new LiteralNode(ConsumeToken());

@@ -21,7 +21,7 @@ namespace LangExperiments
         {
             "false" => SyntaxKind.falseKeyword,
             "true" => SyntaxKind.TrueKeyword,
-            _ => SyntaxKind.undefinedKeyword
+            _ => SyntaxKind.Identifier
         };
 
         public SyntaxNode Lex()

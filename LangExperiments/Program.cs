@@ -18,6 +18,7 @@ namespace LangExperiments
 
 
                 var syntaxTree = SyntaxTree.Parse(input);
+
                 var binder = new Binder();
                 var boundTree = binder.BindExpression(syntaxTree.Root);
 

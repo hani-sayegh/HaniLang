@@ -5,6 +5,7 @@ namespace LangExperiments
 {
     static class Extensions
     {
+        public static T To<T>(this object o) => (T)o;
         public static string Tree(this ISyntaxNode node)
         {
             var sb = new StringBuilder();

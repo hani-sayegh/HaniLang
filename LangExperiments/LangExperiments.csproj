@@ -54,6 +54,7 @@
     <Compile Include="Binder\BoundUnaryExpression.cs" />
     <Compile Include="Nodes\BinaryNode.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Nodes\IdentifierNode.cs" />
     <Compile Include="Nodes\ISyntaxNode.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Nodes\LiteralNode.cs" />
